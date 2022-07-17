@@ -1,0 +1,23 @@
+{
+  "version": "0.0.0-alpha",
+  "scripts": {
+    "postinstall": "npm run build; npm run link",
+    "build": "esbuild src/main.ts --platform=node --target=node16 --bundle --outfile=dsync.js",
+    "link": "sudo ln -sf $PWD/dist/dsync.js /usr/local/bin/dsync",
+    "start": "nodemon -e ts --exec \"npm run build\""
+  },
+  "devDependencies": {
+    "@tsconfig/node16": "1.0.3",
+    "@tsconfig/recommended": "1.0.1",
+    "esbuild": "0.14.49",
+    "nodemon": "2.0.19",
+    "prettier": "2.7.1",
+    "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "@types/args": "5.0.0",
+    "@types/rsync": "0.4.32",
+    "args": "5.0.3",
+    "rsync": "0.6.1"
+  }
+}
