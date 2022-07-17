@@ -1,19 +1,11 @@
-import path from 'path';
-import { assert } from './utils';
+import { assert, assertServerDirectoryExists, local, server } from './utils';
 import { existsSync } from 'fs';
 import { dsync } from './dsync';
+import { Options } from './options';
 
-export async function write({
-  project,
-  localDirectory,
-  serverDirectory,
-}: {
-  localDirectory: string;
-  serverDirectory: string;
-  project: string;
-}) {
-  const source = path.join(localDirectory, project);
-  const destination = path.join(serverDirectory, project);
+export async function write(options: Options) {
+  const source = local(options);
+  const destination = server(options);
 
   assert(existsSync(source), 'Project does not exist. Looked at {source}.', {
     source,
@@ -22,21 +14,11 @@ export async function write({
   await dsync({ source, destination });
 }
 
-export async function read({
-  project,
-  localDirectory,
-  serverDirectory,
-}: {
-  localDirectory: string;
-  serverDirectory: string;
-  project: string;
-}) {
-  const destination = path.join(localDirectory, project);
-  const source = path.join(serverDirectory, project);
+export async function read(options: Options) {
+  const source = server(options);
+  const destination = local(options);
 
-  assert(existsSync(source), 'Project does not exist. Looked at {source}.', {
-    source,
-  });
+  assertServerDirectoryExists(options);
 
   await dsync({ source, destination });
 }
